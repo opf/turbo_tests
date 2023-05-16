@@ -61,7 +61,7 @@ module TurboTests
         ParallelTests::RSpec::Runner.tests_with_size(@files, {}).size
       ].min
 
-      use_runtime_info = @files == ["spec"]
+      use_runtime_info = @files.all?{|f| f =~ /^spec/}
 
       group_opts = {}
 
