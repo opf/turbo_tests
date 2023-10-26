@@ -9,6 +9,8 @@ module TurboTests
   class Runner
     using CoreExtensions
 
+    attr_reader :use_runtime_info
+
     def self.run(opts = {})
       files = opts[:files]
       formatters = opts[:formatters]
@@ -42,6 +44,7 @@ module TurboTests
       @reporter = opts[:reporter]
       @files = opts[:files]
       @tags = opts[:tags]
+      @use_runtime_info = opts[:runtime_log].to_s != "" || (@files == ["spec"])
       @runtime_log = opts[:runtime_log] || "tmp/turbo_rspec_runtime.log"
       @verbose = opts[:verbose]
       @fail_fast = opts[:fail_fast]
@@ -60,8 +63,6 @@ module TurboTests
         ParallelTests.determine_number_of_processes(@count),
         ParallelTests::RSpec::Runner.tests_with_size(@files, {}).size
       ].min
-
-      use_runtime_info = @files.all?{|f| f =~ /^spec/}
 
       group_opts = {}
 
